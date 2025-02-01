@@ -7,7 +7,6 @@ import time
 
 
 secrets = dotenv_values(".env") # Load instagram credentials from .env file
-print(secrets["INSTAGRAM_USERNAME"])
 
 # Read usernames from file
 with open("usernames.txt", "r", encoding="utf-8") as file:
@@ -44,7 +43,7 @@ time.sleep(1)  # Wait for the login page to load
 # Enter username and password
 driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
 driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
-time.sleep(7)  # Wait for login
+time.sleep(9)  # Wait for login
 
 filtered_usernames = [] # List of unfollowed usernames
 remaining_usernames = [] # List of followed usernames that dont follow back
@@ -78,6 +77,7 @@ for insta_username in usernames:
 
     elif inp == "q": # Quit
 
+        # Save or update last username
         with open("Last username.txt", "w", encoding="utf-8") as file:
             file.write("".join(insta_username) + "\n")
 
@@ -89,10 +89,8 @@ for insta_username in usernames:
 
 driver.quit()
 
-with open("filtered_usernames.txt", "w", encoding="utf-8") as file:
-        file.write("".join(filtered_usernames) + "\n")
-
-with open("usernames.txt", "w", encoding="utf-8") as file:
-        file.write("".join(usernames) + "\n")
+# Save or update unfollowed usernames
+with open("unfollowed_usernames.txt", "w", encoding="utf-8") as file:
+        file.write("\n".join(filtered_usernames) + "\n")
 
 print("total users unfollowed: ", len(filtered_usernames))
