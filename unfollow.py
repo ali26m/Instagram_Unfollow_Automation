@@ -4,29 +4,45 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from dotenv import dotenv_values
 import time
+import os
 
 
 secrets = dotenv_values(".env") # Load instagram credentials from .env file
 
 # Read usernames from file
-with open("usernames.txt", "r", encoding="utf-8") as file:
-    usernames = [line.strip() for line in file if line.strip()]  # Removes empty lines
+if os.path.exists("usernames.txt"):
+    with open("usernames.txt", "r", encoding="utf-8") as file:
+        usernames = [line.strip() for line in file if line.strip()]  # Removes empty lines
+    print("usernames.txt file found and loaded successfully.")
+else:
+    print("Error: usernames.txt not found. Please make sure the file exists.")
 
-# Read last username that were quit from 
-with open("Last username.txt", "r", encoding="utf-8") as file:
-    last_username = file.readline().strip()  # Removes empty lines
+# Check if Last_username.txt exists 
+if os.path.exists("Last_username.txt"):
 
-resume = input("Resume unfollowing from last stop? (y/n): ")
+    # Read last username that were quit from 
+    with open("Last_username.txt", "r", encoding="utf-8") as file:
+        last_username = file.readline().strip()  # Removes empty lines
+    print("Last_username.txt found and loaded successfully.")
 
-if resume == "y":
+    resume = input("Resume unfollowing from last stop? (y/n): ")
 
-    # Find index of last quit username
-    if last_username in usernames:
-        start_index = usernames.index(last_username) + 1
-    else:
-        start_index = 0
+    # Check if the user wants to resume from last stop    
+    if resume == "y":
 
-    usernames = usernames[start_index:]
+        # Find index of last quit username
+        if last_username in usernames:
+            start_index = usernames.index(last_username) + 1
+        else:
+            start_index = 0
+
+        usernames = usernames[start_index:]
+
+
+else:
+    print("Last_username.txt not found.")
+   
+
 
 # Instagram login process
 options = webdriver.ChromeOptions()
@@ -84,7 +100,7 @@ for insta_username in usernames:
         break
 
     else:
-        print("Invalid input")
+        print("Invalid input.")
         continue
 
 driver.quit()
