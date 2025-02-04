@@ -36,7 +36,7 @@ python unfollow.py
    > Unfollow? (0/1/q):
    - **0**: Skip the user and don't unfollow.
    - **1**: Unfollow the user.
-   - **q** Quit the execution and save progress.
+   - **q**: Quit the execution and save progress.
 5. The script will generate two files:
    - `unfollowed_usernames.txt` → Contains the list of users you have unfollowed.
    - `Last_username.txt` → Stores the last processed username to resume later.
