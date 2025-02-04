@@ -51,3 +51,7 @@ python unfollow.py
 
 
 # Thank You
+
+
+
+This script is meant for educational purposes only. You can use it at your own risk.
