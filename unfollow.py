@@ -78,7 +78,7 @@ for insta_username in usernames:
     elif inp == "q": # Quit
 
         # Save or update last username
-        with open("Last username.txt", "w", encoding="utf-8") as file:
+        with open("Last_username.txt", "w", encoding="utf-8") as file:
             file.write("".join(insta_username) + "\n")
 
         break
