@@ -32,7 +32,7 @@ if os.path.exists("Last_username.txt"):
 
         # Find index of last quit username
         if last_username in usernames:
-            start_index = usernames.index(last_username) + 1
+            start_index = usernames.index(last_username)
         else:
             start_index = 0
 
@@ -62,7 +62,6 @@ driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"]
 time.sleep(9)  # Wait for login
 
 filtered_usernames = [] # List of unfollowed usernames
-remaining_usernames = [] # List of followed usernames that dont follow back
 count = 0 # Count of unfollowed users to display during execution 
 
 for insta_username in usernames:
@@ -72,24 +71,26 @@ for insta_username in usernames:
     inp = input("Unfollow? (0/1/q): ")
 
     if inp == "0":
-        remaining_usernames.append(insta_username)
         pass
 
     elif inp == "1":
-        filtered_usernames.append(insta_username)
+        try:
+            # Locate and click "Following" button
+            following_button = driver.find_element(By.XPATH, "//button[contains(., 'Following')]")
+            following_button.click()
+            time.sleep(1)
 
-        count += 1
-        print("Count: ", count)
+            # Click "Unfollow" from the popup
+            unfollow_button = driver.find_element(By.XPATH, "//span[contains(text(),'Unfollow')]")
+            unfollow_button.click()
+            print(f"Unfollowed {insta_username}")
 
-        # Locate and click "Following" button
-        following_button = driver.find_element(By.XPATH, "//button[contains(., 'Following')]")
-        following_button.click()
-        time.sleep(1)
+            filtered_usernames.append(insta_username)
 
-        # Click "Unfollow" from the popup
-        unfollow_button = driver.find_element(By.XPATH, "//span[contains(text(),'Unfollow')]")
-        unfollow_button.click()
-        print(f"Unfollowed {insta_username}")
+            count += 1
+            print("Count: ", count)
+        except:
+            print("Error: Not an instagram profile page.")
 
     elif inp == "q": # Quit
 
@@ -106,7 +107,7 @@ for insta_username in usernames:
 driver.quit()
 
 # Save or update unfollowed usernames
-with open("unfollowed_usernames.txt", "w", encoding="utf-8") as file:
+with open("unfollowed_usernames.txt", "a", encoding="utf-8") as file:
         file.write("\n".join(filtered_usernames) + "\n")
 
-print("total users unfollowed: ", len(filtered_usernames))
+print("Total users unfollowed: ", len(filtered_usernames))
