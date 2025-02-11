@@ -10,7 +10,7 @@ A Python script to automate the process of unfollowing users on Instagram with j
 - Stores the list of unfollowed users and the last processed username. 
 
 ## Demo Video:
-   
+   https://github.com/user-attachments/assets/554cca89-3f20-43f2-9029-9623e6f1a735
 
 ## Setup
 1. Create a `.env` file in the project directory and add your Instagram credentials (do not share your `.env` with anyone):
