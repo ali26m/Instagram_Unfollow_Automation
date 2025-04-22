@@ -9,16 +9,19 @@ A Python script to automate the process of unfollowing users on Instagram with j
 - Display the number of unfollowed users
 - Stores the list of unfollowed users and the last processed username. 
 
+## Demo Video:
+   https://github.com/user-attachments/assets/554cca89-3f20-43f2-9029-9623e6f1a735
+
 ## Setup
-1. Create a `.env` file in the project directory and add your Instagram credentials (do not share your `.env` to anyone):
+1. Create a `.env` file in the project directory and add your Instagram credentials (do not share your `.env` with anyone):
    ```env
    INSTAGRAM_USERNAME="your_username"
    INSTAGRAM_PASSWORD="your_password"
    ```
 2. Create a `usernames.txt` file in the same directory and list the usernames you want to unfollow (one per line).
-   - You can use the Instagram feature to download your data and information to a file and use it. you can see the instructions of downloading a copy of your information in Accounts Center [here](https://help.instagram.com/181231772500920?helpref=faq_content#download-a-copy-of-your-information-in-accounts-center). Choose wheather you want to download all your data or just the `followers and following` data for this script.
+   - You can use the Instagram feature to download your data and information to a file and use it. you can see the instructions for downloading a copy of your information in the Accounts Center [here](https://help.instagram.com/181231772500920?helpref=faq_content#download-a-copy-of-your-information-in-accounts-center). Choose whether you want to download all your data or just the `followers and following` data for this script.
    - After downloading the zip file and exporting the files go to [comparetwolists.com](https://comparetwolists.com/) and upload `following.html` into List A and `followers_1.html` into List B, then check the Instagram followers checkbox and hit compare lists.
-   - the lists will be displayed. The list `Only in list A` contains the usernames that you follow the but they didn't follow you back. download it and rename it to `usernames.txt` to move it with the Python script.
+   - the lists will be displayed. The list `Only in list A` contains the usernames that you follow but they didn't follow you back. download it and rename it to `usernames.txt` to move it with the Python script.
 
 ## Usage
 Run the script using:
@@ -44,10 +47,9 @@ python unfollow.py
 ## Note:
 - Test the code multiple times to adjust the sleep time based on your internet connection.
 - Give at least one second more after the webpage has loaded.
-- Example: For Instagram login, it takes longer than other processes for validation and authentication.
-  > time.sleep(9)
 
-## Demo Video:
+For example: Instagram login, takes longer than other processes for validation and authentication.
+  > time.sleep(9)
 
 
 # Thank You
