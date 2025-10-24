@@ -51,19 +51,19 @@ driver = webdriver.Chrome(options=options)
 # Adjust the sleep time based on your internet connection
 # -------------------------------------------------------------
 
-driver.get("https://www.instagram.com/accounts/login/")
-time.sleep(1)  # Wait for the login page to load
+driver.get("https://www.instagram.com/accounts/login")
+time.sleep(2)  # Wait for the login page to load
 
 # Enter username and password
 driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
 driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
-time.sleep(50)  # Wait for login
+time.sleep(35)  # Wait for login
 
 count = 0 # Count of unfollowed users to display during execution 
 
 for insta_username in usernames:
     driver.get(f"https://www.instagram.com/{insta_username}/")
-    time.sleep(3)  # Wait for profile page to load
+    time.sleep(2)  # Wait for profile page to load
 
     try:
         # Locate and click "Following" button
@@ -74,20 +74,19 @@ for insta_username in usernames:
         # Locate and click "Unfollow" button
         following_button = driver.find_element(By.XPATH, "//button[contains(., 'Unfollow')]")
         following_button.click()
-        time.sleep(2)
+        time.sleep(1)
 
         print(f"unrequest {insta_username}")
 
         count += 1
         print("Count: ", count)
 
-    except Exception as e:
-        print("Error: ", e)
-
-    finally:
         # Save or update last username
         with open("Last_unrequested_username.txt", "w", encoding="utf-8") as file:
             file.write("".join(insta_username) + "\n")
+            
+    except Exception as e:
+        print("Error: ", e)
 
 
 driver.quit()

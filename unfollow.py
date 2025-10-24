@@ -56,7 +56,7 @@ time.sleep(1)  # Wait for the login page to load
 # Enter username and password
 driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
 driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
-time.sleep(20)  # Wait for login
+time.sleep(35)  # Wait for login
 
 filtered_usernames = [] # List of unfollowed usernames
 count = 0 # Count of unfollowed users to display during execution 
