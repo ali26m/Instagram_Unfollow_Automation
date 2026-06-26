@@ -10,18 +10,18 @@ import os
 secrets = dotenv_values(".env") # Load instagram credentials from .env file
 
 # Read usernames from file
-if os.path.exists("usernames.txt"):
-    with open("usernames.txt", "r", encoding="utf-8") as file:
+if os.path.exists("data/text_files/usernames.txt"):
+    with open("data/text_files/usernames.txt", "r", encoding="utf-8") as file:
         usernames = [line.strip() for line in file if line.strip()]  # Removes empty lines
     print("usernames.txt file found and loaded successfully.")
 else:
     print("Error: usernames.txt not found. Please make sure the file exists.")
 
 # Check if Last_username.txt exists 
-if os.path.exists("Last_username.txt"):
+if os.path.exists("data/text_files/Last_username.txt"):
 
     # Read last username that were quit from 
-    with open("Last_username.txt", "r", encoding="utf-8") as file:
+    with open("data/text_files/Last_username.txt", "r", encoding="utf-8") as file:
         last_username = file.readline().strip()  # Removes empty lines
     print("Last_username.txt found and loaded successfully.")
 
@@ -51,11 +51,10 @@ driver = webdriver.Chrome(options=options)
 # -------------------------------------------------------------
 
 driver.get("https://www.instagram.com/accounts/login/")
-time.sleep(1)  # Wait for the login page to load
+time.sleep(20)  # Wait for the login page to load
 
-# Enter username and password
-driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
-driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
+# driver.find_element(By.NAME, "Mobile number, username or email").send_keys(secrets["INSTAGRAM_USERNAME"])
+# driver.find_element(By.NAME, "Password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
 time.sleep(35)  # Wait for login
 
 filtered_usernames = [] # List of unfollowed usernames
@@ -92,7 +91,7 @@ for insta_username in usernames:
     elif inp == "q": # Quit
 
         # Save or update last username
-        with open("Last_username.txt", "w", encoding="utf-8") as file:
+        with open("data/text_files/Last_username.txt", "w", encoding="utf-8") as file:
             file.write("".join(insta_username) + "\n")
 
         break
@@ -104,7 +103,7 @@ for insta_username in usernames:
 driver.quit()
 
 # Save or update unfollowed usernames
-with open("unfollowed_usernames.txt", "a", encoding="utf-8") as file:
+with open("data/text_files/unfollowed_usernames.txt", "a", encoding="utf-8") as file:
         file.write("\n".join(filtered_usernames) + "\n")
 
 print("Total users unfollowed: ", len(filtered_usernames))

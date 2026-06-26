@@ -10,18 +10,18 @@ import os
 secrets = dotenv_values(".env") # Load instagram credentials from .env file
 
 # Read usernames from file
-if os.path.exists("requests.txt"):
-    with open("requests.txt", "r", encoding="utf-8") as file:
+if os.path.exists("data/text_files/requests.txt"):
+    with open("data/text_files/requests.txt", "r", encoding="utf-8") as file:
         usernames = [line.strip() for line in file if line.strip()]  # Removes empty lines
     print("requests.txt file found and loaded successfully.")
 else:
     print("Error: requests.txt not found. Please make sure the file exists.")   
 
 # Check if Last_username.txt exists 
-if os.path.exists("Last_unrequested_username.txt"):
+if os.path.exists("data/text_files/Last_unrequested_username.txt"):
 
     # Read last username that were quit from 
-    with open("Last_unrequested_username.txt", "r", encoding="utf-8") as file:
+    with open("data/text_files/Last_unrequested_username.txt", "r", encoding="utf-8") as file:
         last_username = file.readline().strip()  # Removes empty lines
     print("Last_unrequested_username.txt found and loaded successfully.")
 
@@ -41,6 +41,8 @@ if os.path.exists("Last_unrequested_username.txt"):
 else:
     print("Last_unrequested_username.txt not found.")
 
+# take the first 200 users to avoid alerting Instagram's security system.
+usernames = usernames[:136]
 
 # Instagram login process
 options = webdriver.ChromeOptions()
@@ -49,32 +51,35 @@ driver = webdriver.Chrome(options=options)
 
 # -------------------------------------------------------------
 # Adjust the sleep time based on your internet connection
+# To calculate the time to process all the usernames:
+# Total time (in seconds) = 37 + n * (4.5)
+# Where 37 is the time to login, n is the number of usernames, and 4.5 is the time per username.
 # -------------------------------------------------------------
 
 driver.get("https://www.instagram.com/accounts/login")
-time.sleep(2)  # Wait for the login page to load
+time.sleep(20)  # Wait for the login page to load
 
 # Enter username and password
-driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
-driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
+# driver.find_element(By.NAME, "username").send_keys(secrets["INSTAGRAM_USERNAME"])
+# driver.find_element(By.NAME, "password").send_keys(secrets["INSTAGRAM_PASSWORD"] + Keys.RETURN)
 time.sleep(35)  # Wait for login
 
 count = 0 # Count of unfollowed users to display during execution 
 
 for insta_username in usernames:
     driver.get(f"https://www.instagram.com/{insta_username}/")
-    time.sleep(2)  # Wait for profile page to load
+    time.sleep(3)  # Wait for profile page to load
 
     try:
         # Locate and click "Following" button
         following_button = driver.find_element(By.XPATH, "//button[contains(., 'Requested')]")
         following_button.click()
-        time.sleep(1.5)
+        time.sleep(2)
         
         # Locate and click "Unfollow" button
         following_button = driver.find_element(By.XPATH, "//button[contains(., 'Unfollow')]")
         following_button.click()
-        time.sleep(1)
+        time.sleep(5)
 
         print(f"unrequest {insta_username}")
 
@@ -82,11 +87,12 @@ for insta_username in usernames:
         print("Count: ", count)
 
         # Save or update last username
-        with open("Last_unrequested_username.txt", "w", encoding="utf-8") as file:
+        with open("data/text_files/Last_unrequested_username.txt", "w", encoding="utf-8") as file:
             file.write("".join(insta_username) + "\n")
             
     except Exception as e:
         print("Error: ", e)
+        time.sleep(5)  # Wait before trying the next username
 
 
 driver.quit()
